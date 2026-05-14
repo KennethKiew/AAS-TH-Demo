@@ -1,0 +1,2223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AAS Thailand — Luxury Automotive Ecosystem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Syne:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #0d0d0d;
+  --dark: #161616;
+  --panel: #1e1e1e;
+  --border: rgba(255,255,255,0.07);
+  --border-hover: rgba(255,255,255,0.18);
+  --white: #ffffff;
+  --grey: #5a5a5a;
+  --grey-light: #8a8a8a;
+  --yellow: #FFD400;
+  --blue: #0167BA;
+  --green: #00B236;
+  --red: #7a1a1a;
+  --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior:smooth; font-size:16px; }
+
+body {
+  font-family: 'Syne', sans-serif;
+  background: var(--black);
+  color: var(--white);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── TYPOGRAPHY ─── */
+.f-display { font-family: 'Cormorant Garamond', serif; }
+.t-label {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--grey-light);
+}
+.t-headline {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+.t-sub {
+  font-size: clamp(1.25rem, 2vw, 1.875rem);
+  font-weight: 300;
+  line-height: 1.3;
+}
+.t-body {
+  font-size: 0.9375rem;
+  line-height: 1.75;
+  color: var(--grey-light);
+}
+
+/* ─── LAYOUT ─── */
+.wrap { max-width: 1440px; margin: 0 auto; padding: 0 48px; }
+@media(max-width:768px){ .wrap{ padding:0 24px; } }
+
+/* ─── PAGE SYSTEM ─── */
+.page { display:none; min-height:100vh; }
+.page.active { display:block; animation: pgIn 0.55s var(--ease) both; }
+@keyframes pgIn {
+  from { opacity:0; transform:translateY(16px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ─── NAV ─── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 900;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  background: rgba(13,13,13,0.88);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.4s;
+}
+nav.solid { background: rgba(13,13,13,0.98); }
+.nav-inner {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--white);
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.nav-logo:hover { opacity: 0.6; }
+.nav-links {
+  display: flex;
+  gap: 36px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--grey-light);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s;
+  position: relative;
+  padding-bottom: 2px;
+}
+.nav-links a::after {
+  content:'';
+  position: absolute;
+  bottom: -2px; left: 0;
+  width: 0; height: 1px;
+  background: var(--white);
+  transition: width 0.3s var(--ease);
+}
+.nav-links a:hover, .nav-links a.active { color: var(--white); }
+.nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+.nav-right { display:flex; align-items:center; gap:20px; }
+.nav-cart {
+  position: relative;
+  background: none;
+  border: none;
+  color: var(--white);
+  cursor: pointer;
+  padding: 8px;
+  transition: transform 0.2s;
+  line-height: 1;
+}
+.nav-cart:hover { transform: scale(1.1); }
+.cart-dot {
+  position: absolute;
+  top: 4px; right: 4px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--yellow);
+  display: none;
+}
+.cart-dot.visible { display: block; }
+.nav-burger {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--white);
+  cursor: pointer;
+  padding: 8px;
+  flex-direction: column;
+  gap: 5px;
+}
+.nav-burger span {
+  display: block;
+  width: 22px;
+  height: 1px;
+  background: var(--white);
+  transition: all 0.3s;
+}
+@media(max-width:900px){
+  .nav-links { display:none; }
+  .nav-burger { display:flex; }
+}
+
+/* Mobile Nav */
+.mob-nav {
+  position: fixed;
+  inset: 0;
+  background: var(--black);
+  z-index: 950;
+  transform: translateX(100%);
+  transition: transform 0.5s var(--ease);
+  display: flex;
+  flex-direction: column;
+  padding: 80px 40px 40px;
+}
+.mob-nav.open { transform: translateX(0); }
+.mob-close {
+  position: absolute;
+  top: 20px; right: 24px;
+  background: none;
+  border: none;
+  color: var(--white);
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+.mob-links { list-style:none; display:flex; flex-direction:column; gap:24px; }
+.mob-links a {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.25rem;
+  font-weight: 300;
+  color: var(--white);
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 20px;
+  display: block;
+}
+.mob-links a:hover { opacity: 0.5; }
+
+/* ─── CART DRAWER ─── */
+.cart-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+.cart-backdrop.open { opacity:1; pointer-events:all; }
+.cart-drawer {
+  position: fixed;
+  top: 0; right: 0; bottom: 0;
+  width: min(440px, 100%);
+  background: var(--dark);
+  z-index: 1010;
+  transform: translateX(100%);
+  transition: transform 0.5s var(--ease);
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--border);
+}
+.cart-drawer.open { transform: translateX(0); }
+.cart-head {
+  padding: 28px 32px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.cart-head-title { font-size:0.75rem; font-weight:500; letter-spacing:0.18em; text-transform:uppercase; }
+.cart-head-count { font-size:0.75rem; color:var(--grey-light); }
+.cart-x {
+  background: none;
+  border: none;
+  color: var(--grey-light);
+  cursor: pointer;
+  font-size: 1.25rem;
+  transition: color 0.2s;
+  line-height: 1;
+}
+.cart-x:hover { color: var(--white); }
+.cart-body { flex:1; overflow-y:auto; padding: 24px 32px; }
+.cart-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 12px;
+  color: var(--grey);
+}
+.cart-empty-state svg { opacity: 0.3; }
+.cart-empty-state p { font-size:0.875rem; letter-spacing:0.1em; text-transform:uppercase; }
+.cart-item {
+  display: grid;
+  grid-template-columns: 72px 1fr auto;
+  gap: 16px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border);
+  align-items: start;
+}
+.cart-item-img {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  background: var(--panel);
+  display: block;
+}
+.ci-brand { font-size:0.625rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--grey-light); margin-bottom:4px; }
+.ci-name { font-size:0.875rem; font-weight:500; margin-bottom:8px; }
+.ci-price { font-size:0.875rem; color:var(--grey-light); }
+.ci-qty { display:flex; align-items:center; gap:10px; margin-top:8px; }
+.qty-btn {
+  width:26px; height:26px;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--white);
+  cursor: pointer;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.875rem;
+  transition: border-color 0.2s;
+}
+.qty-btn:hover { border-color: var(--white); }
+.ci-remove {
+  background: none;
+  border: none;
+  color: var(--grey);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: color 0.2s;
+  padding: 4px;
+}
+.ci-remove:hover { color: var(--white); }
+.cart-foot {
+  padding: 24px 32px;
+  border-top: 1px solid var(--border);
+}
+.cart-total-row {
+  display:flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 20px;
+}
+.cart-total-label { font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--grey-light); }
+.cart-total-amt { font-size:1.25rem; font-weight:500; }
+
+/* ─── BUTTONS ─── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition: all 0.3s var(--ease);
+}
+.btn-white { background: var(--white); color: var(--black); }
+.btn-white:hover { background: var(--yellow); }
+.btn-outline {
+  background: transparent;
+  color: var(--white);
+  border: 1px solid rgba(255,255,255,0.25);
+}
+.btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.05); }
+.btn-full { width:100%; justify-content:center; }
+.btn-sm { padding: 10px 22px; font-size:0.6875rem; }
+
+/* ─── HERO ─── */
+.hero {
+  position: relative;
+  height: 100vh;
+  min-height: 640px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 10s ease-out;
+}
+.hero-bg.zoom { transform: scale(1.06); }
+.hero-vignette {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    rgba(13,13,13,0.85) 0%,
+    rgba(13,13,13,0.5) 50%,
+    rgba(13,13,13,0.2) 100%
+  );
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding-top: 68px;
+}
+.hero-eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--yellow);
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: riseIn 1s var(--ease) 0.3s both;
+}
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3rem, 7vw, 6.5rem);
+  font-weight: 300;
+  line-height: 1.0;
+  letter-spacing: -0.01em;
+  margin-bottom: 24px;
+  max-width: 820px;
+  opacity: 0;
+  animation: riseIn 1s var(--ease) 0.5s both;
+}
+.hero-sub {
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--grey-light);
+  max-width: 480px;
+  line-height: 1.7;
+  margin-bottom: 40px;
+  opacity: 0;
+  animation: riseIn 1s var(--ease) 0.7s both;
+}
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: riseIn 1s var(--ease) 0.9s both;
+}
+@keyframes riseIn {
+  from { opacity:0; transform:translateY(28px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.hero-scroll {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--grey);
+  font-size: 0.5625rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  animation: pulse 2.5s ease-in-out infinite;
+}
+.scroll-line {
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(to bottom, var(--grey), transparent);
+}
+@keyframes pulse {
+  0%, 100% { opacity:0.4; transform: translateX(-50%) translateY(0); }
+  50%       { opacity:1;   transform: translateX(-50%) translateY(6px); }
+}
+
+/* ─── SECTION ─── */
+.section { padding: 120px 0; }
+.section-sm { padding: 80px 0; }
+.section-dark { background: var(--dark); }
+.section-darker { background: #0a0a0a; }
+
+.section-header { margin-bottom: 64px; }
+.section-header.centered { text-align:center; }
+
+/* ─── BRAND TILES ─── */
+.brand-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+}
+@media(max-width:900px){ .brand-grid{ grid-template-columns:repeat(2,1fr); } }
+@media(max-width:500px){ .brand-grid{ grid-template-columns:1fr 1fr; } }
+
+.brand-tile {
+  position: relative;
+  aspect-ratio: 2/3;
+  overflow: hidden;
+  cursor: pointer;
+  display: block;
+  text-decoration: none;
+}
+.brand-tile-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.8s var(--ease);
+  filter: brightness(0.7);
+}
+.brand-tile:hover .brand-tile-bg { transform: scale(1.06); filter: brightness(0.85); }
+.brand-tile-grad {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(13,13,13,0.95) 0%, transparent 55%);
+}
+.brand-tile-body {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 32px 28px;
+  z-index: 2;
+  transform: translateY(8px);
+  transition: transform 0.4s var(--ease);
+}
+.brand-tile:hover .brand-tile-body { transform: translateY(0); }
+.bt-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.75rem;
+  font-weight: 300;
+  margin-bottom: 4px;
+  color: var(--white);
+}
+.bt-tag {
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 16px;
+}
+.bt-cta {
+  font-size: 0.625rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--yellow);
+  opacity: 0;
+  transition: opacity 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.brand-tile:hover .bt-cta { opacity:1; }
+
+/* ─── EDITORIAL SPLIT ─── */
+.editorial {
+  display: grid;
+  grid-template-columns: 58% 42%;
+  min-height: 520px;
+  align-items: stretch;
+}
+.editorial.rev { grid-template-columns: 42% 58%; }
+@media(max-width:900px){
+  .editorial, .editorial.rev { grid-template-columns: 1fr; }
+}
+.ed-visual {
+  overflow: hidden;
+  position: relative;
+}
+.ed-visual img {
+  width:100%; height:100%;
+  object-fit:cover;
+  display:block;
+  transition: transform 0.9s var(--ease);
+}
+.editorial:hover .ed-visual img { transform: scale(1.04); }
+.ed-body {
+  padding: 72px 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+@media(max-width:768px){ .ed-body{ padding:48px 28px; } }
+.ed-label {
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--grey-light);
+  margin-bottom: 20px;
+}
+.ed-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.75rem, 3vw, 2.75rem);
+  font-weight: 300;
+  line-height: 1.2;
+  margin-bottom: 20px;
+}
+.ed-text {
+  font-size: 0.9375rem;
+  line-height: 1.8;
+  color: var(--grey-light);
+  margin-bottom: 36px;
+}
+.ed-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--white);
+  text-decoration: none;
+  cursor: pointer;
+  transition: gap 0.3s;
+}
+.ed-link:hover { gap: 18px; }
+.ed-link svg { transition: transform 0.3s; }
+
+/* ─── STATS ─── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 1px solid var(--border);
+}
+@media(max-width:700px){ .stats-row{ grid-template-columns:repeat(2,1fr); } }
+.stat {
+  padding: 56px 40px;
+  text-align: center;
+  border-right: 1px solid var(--border);
+  position: relative;
+}
+.stat:last-child { border-right:none; }
+.stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.5rem, 4vw, 3.75rem);
+  font-weight: 300;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.stat-lbl {
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--grey-light);
+}
+
+/* ─── PRODUCT CARDS ─── */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+@media(max-width:900px){ .product-grid{ grid-template-columns:repeat(2,1fr); } }
+@media(max-width:560px){ .product-grid{ grid-template-columns:1fr; } }
+
+.product-card {
+  background: var(--dark);
+  cursor: pointer;
+  transition: all 0.4s var(--ease);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid transparent;
+}
+.product-card:hover { border-color: var(--border-hover); }
+.pc-img {
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  position: relative;
+}
+.pc-img img {
+  width:100%; height:100%;
+  object-fit:cover;
+  transition: transform 0.7s var(--ease);
+  display: block;
+}
+.product-card:hover .pc-img img { transform: scale(1.06); }
+.pc-badge {
+  position: absolute;
+  top: 16px; left: 16px;
+  background: var(--yellow);
+  color: var(--black);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+}
+.pc-body { padding: 24px; }
+.pc-brand {
+  font-size: 0.625rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--grey-light);
+  margin-bottom: 6px;
+}
+.pc-name {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+.pc-price {
+  font-size: 0.875rem;
+  color: var(--grey-light);
+}
+.pc-price strong { color: var(--white); font-weight:400; }
+.pc-action {
+  position: absolute;
+  bottom: 0; left:0; right:0;
+  padding: 16px 24px;
+  background: var(--panel);
+  transform: translateY(100%);
+  transition: transform 0.35s var(--ease);
+}
+.product-card:hover .pc-action { transform: translateY(0); }
+
+/* ─── BRAND WORLD PAGE ─── */
+.brand-hero {
+  position: relative;
+  height: 100vh;
+  min-height: 600px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+.brand-hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.65);
+  transition: transform 10s ease-out;
+}
+.brand-hero-bg.zoom { transform: scale(1.05); }
+.brand-hero-grad {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(13,13,13,1) 0%, rgba(13,13,13,0.2) 60%);
+}
+.brand-hero-content {
+  position: relative;
+  z-index: 2;
+  padding-bottom: 80px;
+  width: 100%;
+}
+.brand-name-huge {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(4rem, 10vw, 9rem);
+  font-weight: 300;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: riseIn 1s var(--ease) 0.2s both;
+}
+.brand-tagline-lg {
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--grey-light);
+  max-width: 520px;
+  line-height: 1.7;
+  opacity: 0;
+  animation: riseIn 1s var(--ease) 0.5s both;
+}
+
+/* ─── PRODUCT DETAIL ─── */
+.pd-layout {
+  display: grid;
+  grid-template-columns: 62% 38%;
+  min-height: calc(100vh - 68px);
+}
+@media(max-width:900px){ .pd-layout{ grid-template-columns:1fr; } }
+.pd-gallery {
+  position: relative;
+  overflow: hidden;
+  background: #0a0a0a;
+}
+.pd-gallery img {
+  width:100%; height:100%;
+  object-fit: cover;
+  display: block;
+}
+.pd-info {
+  padding: 64px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-left: 1px solid var(--border);
+  overflow-y: auto;
+}
+.pd-brand { font-size:0.625rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--grey-light); margin-bottom:12px; }
+.pd-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 300;
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+.pd-price {
+  font-size: 1.375rem;
+  font-weight: 300;
+  margin-bottom: 32px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+}
+.pd-desc {
+  font-size: 0.9375rem;
+  line-height: 1.8;
+  color: var(--grey-light);
+  margin-bottom: 36px;
+}
+.pd-specs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 36px;
+}
+.spec-item { border: 1px solid var(--border); padding: 14px 16px; }
+.spec-label { font-size:0.5625rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--grey-light); margin-bottom:4px; }
+.spec-val { font-size:0.875rem; font-weight:500; }
+.pd-actions { display:flex; flex-direction:column; gap:12px; }
+
+/* ─── CHECKOUT ─── */
+.checkout-wrap { max-width:860px; margin:0 auto; padding:80px 24px; }
+.checkout-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 64px;
+}
+.cs-step { display:flex; align-items:center; gap:12px; }
+.cs-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--grey-light);
+  transition: all 0.3s;
+  flex-shrink: 0;
+}
+.cs-num.active { background:var(--white); color:var(--black); border-color:var(--white); }
+.cs-num.done { background:var(--green); color:var(--white); border-color:var(--green); }
+.cs-label { font-size:0.6875rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--grey-light); }
+.cs-step.active .cs-label { color:var(--white); }
+.cs-line { width:60px; height:1px; background:var(--border); margin:0 4px; flex-shrink:0; }
+@media(max-width:600px){ .cs-line{width:24px;} .cs-label{display:none;} }
+
+.form-section { margin-bottom: 40px; }
+.form-section-title {
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--grey-light);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:600px){ .form-row{ grid-template-columns:1fr; } }
+.form-group { display:flex; flex-direction:column; gap:8px; }
+.form-label {
+  font-size: 0.625rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--grey-light);
+}
+.form-input {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  color: var(--white);
+  padding: 14px 16px;
+  font-size: 0.9375rem;
+  font-family: 'Syne', sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+.form-input:focus { border-color: rgba(255,255,255,0.35); }
+.form-input::placeholder { color: var(--grey); }
+.co-summary {
+  background: var(--dark);
+  border: 1px solid var(--border);
+  padding: 32px;
+  margin-top: 40px;
+}
+.co-sum-title { font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--grey-light); margin-bottom:24px; }
+.co-sum-row {
+  display:flex;
+  justify-content:space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.875rem;
+}
+.co-sum-row:last-child { border-bottom:none; }
+.co-sum-row.total { font-size:1.0625rem; font-weight:600; padding-top:20px; margin-top:4px; }
+
+.step-panel { display:none; }
+.step-panel.active { display:block; }
+.step-nav { display:flex; gap:12px; margin-top:32px; }
+
+/* ─── ARTICLES / NEWS ─── */
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+@media(max-width:900px){ .news-grid{ grid-template-columns:1fr; } }
+.news-card {
+  background: var(--dark);
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  color: var(--white);
+  display: block;
+}
+.news-card:hover .nc-img img { transform:scale(1.05); }
+.nc-img { aspect-ratio:16/10; overflow:hidden; }
+.nc-img img { width:100%; height:100%; object-fit:cover; transition:transform 0.7s var(--ease); display:block; }
+.nc-body { padding: 28px 24px; }
+.nc-meta { font-size:0.5625rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--grey-light); margin-bottom:10px; }
+.nc-title { font-size:1.0625rem; font-weight:500; line-height:1.3; margin-bottom:10px; }
+.nc-excerpt { font-size:0.875rem; color:var(--grey-light); line-height:1.6; }
+
+/* ─── ABOUT ─── */
+.about-hero {
+  height: 60vh;
+  min-height: 400px;
+  position: relative;
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+}
+.about-hero-bg {
+  position:absolute; inset:0;
+  background-size:cover;
+  background-position:center;
+  filter:brightness(0.4);
+}
+.about-hero-content { position:relative; z-index:2; }
+
+/* ─── CONTACT ─── */
+.contact-grid {
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  padding: 80px 0;
+}
+@media(max-width:900px){ .contact-grid{ grid-template-columns:1fr; gap:48px; } }
+.contact-info-item {
+  display:flex;
+  gap:16px;
+  align-items:flex-start;
+  margin-bottom:28px;
+}
+.contact-icon { font-size:1.125rem; flex-shrink:0; color:var(--grey-light); }
+.contact-detail-label { font-size:0.625rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--grey-light); margin-bottom:4px; }
+.contact-detail-val { font-size:0.9375rem; line-height:1.5; }
+
+/* ─── FOOTER ─── */
+footer {
+  background: #080808;
+  padding: 80px 0 32px;
+  border-top: 1px solid var(--border);
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 64px;
+}
+@media(max-width:900px){ .footer-grid{ grid-template-columns:1fr 1fr; gap:32px; } }
+@media(max-width:560px){ .footer-grid{ grid-template-columns:1fr; } }
+.footer-brand-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.footer-desc { font-size:0.875rem; line-height:1.7; color:var(--grey-light); max-width:280px; }
+.footer-col-title { font-size:0.625rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--white); font-weight:600; margin-bottom:20px; }
+.footer-links-list { list-style:none; display:flex; flex-direction:column; gap:12px; }
+.footer-links-list a {
+  font-size:0.875rem;
+  color:var(--grey-light);
+  text-decoration:none;
+  cursor:pointer;
+  transition:color 0.2s;
+}
+.footer-links-list a:hover { color:var(--white); }
+.footer-bottom {
+  border-top: 1px solid var(--border);
+  padding-top: 28px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:0.6875rem;
+  color:var(--grey);
+}
+
+/* ─── LINE FLOAT ─── */
+.line-btn {
+  position: fixed;
+  bottom: 32px; right: 32px;
+  z-index: 800;
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: var(--green);
+  border: none;
+  cursor: pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow: 0 4px 24px rgba(0,178,54,0.35);
+  transition: all 0.3s var(--ease);
+  text-decoration:none;
+  color: var(--white);
+}
+.line-btn:hover { transform:translateY(-4px) scale(1.05); box-shadow:0 8px 32px rgba(0,178,54,0.5); }
+
+/* ─── TOAST ─── */
+.toast {
+  position: fixed;
+  bottom: 40px; left: 50%;
+  transform: translateX(-50%) translateY(60px);
+  background: var(--white);
+  color: var(--black);
+  padding: 14px 28px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  z-index: 1200;
+  opacity: 0;
+  transition: all 0.4s var(--ease);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ─── BREADCRUMB ─── */
+.breadcrumb-bar {
+  padding: 14px 48px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  color: var(--grey-light);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 68px;
+}
+.bc-link {
+  cursor: pointer;
+  transition: color 0.2s;
+  text-decoration: none;
+  color: var(--grey-light);
+}
+.bc-link:hover { color:var(--white); }
+.bc-sep { opacity:0.4; }
+.bc-current { color:var(--white); }
+
+/* ─── PROFILE ─── */
+.profile-tabs { display:flex; gap:32px; border-bottom:1px solid var(--border); margin-bottom:48px; }
+.profile-tab {
+  padding: 16px 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  color: var(--grey-light);
+  transition: all 0.2s;
+  margin-bottom: -1px;
+  background:none; border-left:none; border-right:none; border-top:none;
+  color: var(--grey-light);
+  font-family: 'Syne', sans-serif;
+}
+.profile-tab.active, .profile-tab:hover { color:var(--white); border-bottom-color:var(--white); }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+.order-row {
+  display:grid;
+  grid-template-columns: auto 1fr 1fr auto;
+  gap:20px;
+  padding:20px 0;
+  border-bottom:1px solid var(--border);
+  align-items:center;
+  font-size:0.875rem;
+}
+@media(max-width:700px){ .order-row{ grid-template-columns:1fr 1fr; } }
+.order-num { font-weight:600; }
+.order-status {
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:4px 12px;
+  font-size:0.625rem;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  font-weight:600;
+}
+.st-processing { background:rgba(1,103,186,0.15); color:var(--blue); }
+.st-delivered  { background:rgba(0,178,54,0.15);  color:var(--green); }
+.st-shipped    { background:rgba(255,212,0,0.15);  color:var(--yellow); }
+
+/* ─── FILTER BAR ─── */
+.filter-bar {
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:40px;
+}
+.filter-btn {
+  padding:8px 20px;
+  font-size:0.625rem;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  border:1px solid var(--border);
+  background:none;
+  color:var(--grey-light);
+  cursor:pointer;
+  font-family:'Syne',sans-serif;
+  transition:all 0.2s;
+}
+.filter-btn:hover, .filter-btn.active { border-color:var(--white); color:var(--white); background:rgba(255,255,255,0.05); }
+
+/* ─── MISC ─── */
+.divider { height:1px; background:var(--border); margin:0; }
+.page-header {
+  padding: 80px 0 64px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 64px;
+}
+.text-yellow { color:var(--yellow); }
+.text-grey { color:var(--grey-light); }
+.gap-y { margin-top:80px; }
+
+/* Careers */
+.job-item {
+  padding: 28px 0;
+  border-bottom: 1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+}
+.job-title { font-size:1rem; font-weight:500; margin-bottom:6px; }
+.job-meta { font-size:0.75rem; color:var(--grey-light); letter-spacing:0.08em; }
+
+/* Locations */
+.locations-grid {
+  display:grid;
+  grid-template-columns: repeat(3,1fr);
+  gap:2px;
+}
+@media(max-width:900px){ .locations-grid{ grid-template-columns:1fr 1fr; } }
+@media(max-width:500px){ .locations-grid{ grid-template-columns:1fr; } }
+.loc-card {
+  padding:36px 32px;
+  background:var(--dark);
+  border:1px solid transparent;
+  transition:border-color 0.3s;
+  cursor:pointer;
+}
+.loc-card:hover { border-color:var(--border-hover); }
+.loc-brand-tag {
+  font-size:0.5625rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--yellow);
+  margin-bottom:12px;
+}
+.loc-name { font-size:1.125rem; font-weight:500; margin-bottom:10px; }
+.loc-addr { font-size:0.875rem; color:var(--grey-light); line-height:1.6; }
+.loc-hours { font-size:0.75rem; color:var(--grey); margin-top:12px; }
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav id="mainNav">
+  <div class="nav-inner">
+    <a class="nav-logo" onclick="go('home')">AAS</a>
+    <ul class="nav-links">
+      <li><a onclick="go('home')" data-page="home">Home</a></li>
+      <li><a onclick="go('brands')" data-page="brands">Brands</a></li>
+      <li><a onclick="go('collection')" data-page="collection">Collection</a></li>
+      <li><a onclick="go('news')" data-page="news">News</a></li>
+      <li><a onclick="go('about')" data-page="about">About</a></li>
+      <li><a onclick="go('contact')" data-page="contact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="nav-cart" onclick="toggleCart()" title="Collection">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-dot" id="cartDot"></span>
+      </button>
+      <a onclick="go('profile')" style="cursor:pointer;color:var(--grey-light);transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#8a8a8a'">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </a>
+      <button class="nav-burger" id="burgerBtn" onclick="toggleMob()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Nav -->
+<div class="mob-nav" id="mobNav">
+  <button class="mob-close" onclick="toggleMob()">✕</button>
+  <ul class="mob-links">
+    <li><a onclick="go('home');toggleMob()">Home</a></li>
+    <li><a onclick="go('brands');toggleMob()">Brands</a></li>
+    <li><a onclick="go('collection');toggleMob()">Collection</a></li>
+    <li><a onclick="go('news');toggleMob()">News</a></li>
+    <li><a onclick="go('about');toggleMob()">About</a></li>
+    <li><a onclick="go('contact');toggleMob()">Contact</a></li>
+    <li><a onclick="go('careers');toggleMob()">Careers</a></li>
+    <li><a onclick="go('locations');toggleMob()">Locations</a></li>
+  </ul>
+</div>
+
+<!-- Cart Drawer -->
+<div class="cart-backdrop" id="cartBackdrop" onclick="toggleCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-head">
+    <div>
+      <div class="cart-head-title">Your Collection</div>
+      <div class="cart-head-count" id="cartCount">0 items</div>
+    </div>
+    <button class="cart-x" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <div class="cart-empty-state" id="cartEmpty">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+      <p>Your collection is empty</p>
+    </div>
+    <div id="cartItemsList"></div>
+  </div>
+  <div class="cart-foot" id="cartFoot" style="display:none;">
+    <div class="cart-total-row">
+      <span class="cart-total-label">Total Acquisition Value</span>
+      <span class="cart-total-amt" id="cartTotal">฿0</span>
+    </div>
+    <button class="btn btn-white btn-full" onclick="go('checkout');toggleCart();">Proceed to Acquisition →</button>
+  </div>
+</div>
+
+<!-- LINE Float -->
+<a class="line-btn" href="#" title="LINE Contact">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.145 2 11.243c0 2.908 1.527 5.504 3.91 7.21.215.147.34.385.33.634l-.066 2.077c-.02.628.669 1.023 1.22.69l2.396-1.4a1.05 1.05 0 01.515-.14c.568.077 1.15.116 1.695.116 5.523 0 10-4.145 10-9.243S17.523 2 12 2zm-3 12H7a.5.5 0 01-.5-.5v-5A.5.5 0 017 8h.5a.5.5 0 01.5.5V13h1.5a.5.5 0 010 1H9zm2.5 0h-.5a.5.5 0 01-.5-.5v-5a.5.5 0 01.5-.5h.5a.5.5 0 01.5.5v5a.5.5 0 01-.5.5zm5 0h-3a.5.5 0 01-.5-.5v-5a.5.5 0 01.5-.5h.5a.5.5 0 01.5.5v4.5h2a.5.5 0 010 1zm1.5-4h-1v-1.5a.5.5 0 00-1 0V13h-1v-1.5a.5.5 0 000-1H15v-1a.5.5 0 00-1 0V13h-1v-5h4.5a.5.5 0 010 1z"/></svg>
+</a>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- ═══════════════════════════════════════════
+     PAGE: HOME
+═══════════════════════════════════════════ -->
+<div class="page active" id="page-home">
+  <section class="hero">
+    <div class="hero-bg" id="heroBg" style="background-image:url('https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1920&q=80')"></div>
+    <div class="hero-vignette"></div>
+    <div class="hero-content wrap">
+      <div class="hero-eyebrow">Authorized Distributor · Thailand</div>
+      <h1 class="hero-title">Beyond<br>Ownership.<br><em>A Lifetime<br>of Care.</em></h1>
+      <p class="hero-sub">AAS Thailand — stewards of the world's most significant automotive legacies. Porsche. Bentley. Ducati. Harley-Davidson.</p>
+      <div class="hero-actions">
+        <button class="btn btn-white" onclick="go('brands')">Explore Brands</button>
+        <button class="btn btn-outline" onclick="go('collection')">View Collection</button>
+      </div>
+    </div>
+    <div class="hero-scroll"><div class="scroll-line"></div>Scroll</div>
+  </section>
+
+  <!-- Brand Grid -->
+  <section class="section-sm" style="padding-top:0;">
+    <div class="brand-grid">
+      <div class="brand-tile" onclick="go('porsche')">
+        <div class="brand-tile-bg" style="background-image:url('https://images.unsplash.com/photo-1503376763036-066120622c74?w=800&q=80')"></div>
+        <div class="brand-tile-grad"></div>
+        <div class="brand-tile-body">
+          <div class="bt-name">Porsche</div>
+          <div class="bt-tag">Engineering Icon</div>
+          <div class="bt-cta">Enter World <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </div>
+      <div class="brand-tile" onclick="go('bentley')">
+        <div class="brand-tile-bg" style="background-image:url('https://images.unsplash.com/photo-1563720223185-11003d516935?w=800&q=80')"></div>
+        <div class="brand-tile-grad"></div>
+        <div class="brand-tile-body">
+          <div class="bt-name">Bentley</div>
+          <div class="bt-tag">British Grandeur</div>
+          <div class="bt-cta">Enter World <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </div>
+      <div class="brand-tile" onclick="go('ducati')">
+        <div class="brand-tile-bg" style="background-image:url('https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&q=80')"></div>
+        <div class="brand-tile-grad"></div>
+        <div class="brand-tile-body">
+          <div class="bt-name">Ducati</div>
+          <div class="bt-tag">Racing Soul</div>
+          <div class="bt-cta">Enter World <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </div>
+      <div class="brand-tile" onclick="go('harley')">
+        <div class="brand-tile-bg" style="background-image:url('https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=800&q=80')"></div>
+        <div class="brand-tile-grad"></div>
+        <div class="brand-tile-body">
+          <div class="bt-name">Harley-Davidson</div>
+          <div class="bt-tag">American Freedom</div>
+          <div class="bt-cta">Enter World <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Editorial -->
+  <section class="section section-dark">
+    <div class="editorial">
+      <div class="ed-visual">
+        <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1200&q=80" alt="Craftsmanship">
+      </div>
+      <div class="ed-body">
+        <div class="ed-label">Our Philosophy</div>
+        <h2 class="ed-title f-display">The Art of Mechanical Perfection</h2>
+        <p class="ed-text">For over three decades, AAS Thailand has stewarded the world's most significant automotive legacies. We don't merely sell vehicles — we curate experiences, preserve heritage, and build lifelong relationships with discerning collectors.</p>
+        <a class="ed-link" onclick="go('about')">Our Story <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section style="padding:0;" class="section-darker">
+    <div class="wrap">
+      <div class="stats-row">
+        <div class="stat"><div class="stat-num f-display">37</div><div class="stat-lbl">Years of Excellence</div></div>
+        <div class="stat"><div class="stat-num f-display">4</div><div class="stat-lbl">Prestigious Brands</div></div>
+        <div class="stat"><div class="stat-num f-display">12K+</div><div class="stat-lbl">Vehicles Delivered</div></div>
+        <div class="stat"><div class="stat-num f-display">98%</div><div class="stat-lbl">Client Satisfaction</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Collection -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-header">
+        <div class="t-label" style="margin-bottom:12px;">Curated Selection</div>
+        <h2 class="f-display" style="font-size:clamp(1.75rem,3vw,2.75rem);font-weight:300;">Current Acquisition Opportunities</h2>
+      </div>
+      <div class="product-grid" id="homeFeatured"></div>
+      <div style="text-align:center;margin-top:48px;">
+        <button class="btn btn-outline" onclick="go('collection')">View Full Collection →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- News Teaser -->
+  <section class="section section-dark">
+    <div class="wrap">
+      <div class="section-header" style="margin-bottom:40px;">
+        <div class="t-label" style="margin-bottom:12px;">Latest</div>
+        <h2 class="f-display" style="font-size:clamp(1.75rem,3vw,2.75rem);font-weight:300;">News & Events</h2>
+      </div>
+      <div class="news-grid" id="homeNews"></div>
+      <div style="text-align:center;margin-top:48px;">
+        <button class="btn btn-outline" onclick="go('news')">All News →</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand-name">AAS</div>
+          <p class="footer-desc">Thailand's premier authorized distributor of Porsche, Bentley, Ducati, and Harley-Davidson. A legacy of precision, a commitment to excellence.</p>
+        </div>
+        <div>
+          <div class="footer-col-title">Brands</div>
+          <ul class="footer-links-list">
+            <li><a onclick="go('porsche')">Porsche</a></li>
+            <li><a onclick="go('bentley')">Bentley</a></li>
+            <li><a onclick="go('ducati')">Ducati</a></li>
+            <li><a onclick="go('harley')">Harley-Davidson</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-col-title">Company</div>
+          <ul class="footer-links-list">
+            <li><a onclick="go('about')">About AAS</a></li>
+            <li><a onclick="go('news')">News</a></li>
+            <li><a onclick="go('careers')">Careers</a></li>
+            <li><a onclick="go('locations')">Locations</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-col-title">Services</div>
+          <ul class="footer-links-list">
+            <li><a onclick="go('collection')">Collection</a></li>
+            <li><a onclick="go('contact')">Contact</a></li>
+            <li><a onclick="go('profile')">My Account</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2025 AAS Auto Service Co., Ltd. All rights reserved.</span>
+        <span>Privacy Policy · Terms</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══ BRANDS HUB ═══ -->
+<div class="page" id="page-brands">
+  <div class="breadcrumb-bar"><a class="bc-link" onclick="go('home')">Home</a><span class="bc-sep">/</span><span class="bc-current">Brands</span></div>
+  <section class="hero" style="height:55vh;min-height:400px;">
+    <div class="hero-bg" style="background-image:url('https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=1920&q=80')"></div>
+    <div class="hero-vignette"></div>
+    <div class="hero-content wrap" style="text-align:center;">
+      <div class="hero-eyebrow">Authorized Distributor</div>
+      <h1 class="hero-title f-display" style="margin:0 auto;max-width:700px;">The Houses We Represent</h1>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap">
+      <div class="brand-grid">
+        <div class="brand-tile" onclick="go('porsche')">
+          <div class="brand-tile-bg" style="background-image:url('https://images.unsplash.com/photo-1503376763036-066120622c74?w=800&q=80')"></div>
+          <div class="brand-tile-grad"></div>
+          <div class="brand-tile-body"><div class="bt-name">Porsche</div><div class="bt-tag">There Is No Substitute</div><div class="bt-cta">Explore <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+        </div>
+        <div class="brand-tile" onclick="go('bentley')">
+          <div class="brand-tile-bg" style="background-image:url('https://images.unsplash.com/photo-1563720223185-11003d516935?w=800&q=80')"></div>
+          <div class="brand-tile-grad"></div>
+          <div class="brand-tile-body"><div class="bt-name">Bentley</div><div class="bt-tag">Be Extraordinary</div><div class="bt-cta">Explore <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+        </div>
+        <div class="brand-tile" onclick="go('ducati')">
+          <div class="brand-tile-bg" style="background-image:url('https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&q=80')"></div>
+          <div class="brand-tile-grad"></div>
+          <div class="brand-tile-body"><div class="bt-name">Ducati</div><div class="bt-tag">Racing DNA</div><div class="bt-cta">Explore <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+        </div>
+        <div class="brand-tile" onclick="go('harley')">
+          <div class="brand-tile-bg" style="background-image:url('https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=800&q=80')"></div>
+          <div class="brand-tile-grad"></div>
+          <div class="brand-tile-body"><div class="bt-name">Harley-Davidson</div><div class="bt-tag">Live to Ride</div><div class="bt-cta">Explore <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══ PORSCHE ═══ -->
+<div class="page" id="page-porsche">
+  <div class="brand-hero">
+    <div class="brand-hero-bg" id="porscheBg" style="background-image:url('https://images.unsplash.com/photo-1503376763036-066120622c74?w=1920&q=80')"></div>
+    <div class="brand-hero-grad"></div>
+    <div class="brand-hero-content wrap">
+      <div class="t-label text-yellow" style="margin-bottom:16px;">AAS × Porsche</div>
+      <div class="brand-name-huge f-display">Porsche</div>
+      <p class="brand-tagline-lg">Seven decades of motorsport heritage distilled into every machine. At AAS Thailand, we offer the complete Porsche range — from refined grand tourers to track-honed icons.</p>
+      <div style="margin-top:32px;opacity:0;animation:riseIn 1s var(--ease) 0.7s both;">
+        <button class="btn btn-white" onclick="filterCollection('Porsche')">Explore Porsche Collection</button>
+      </div>
+    </div>
+  </div>
+  <section class="section section-dark">
+    <div class="editorial rev">
+      <div class="ed-body">
+        <div class="ed-label">Heritage</div>
+        <h2 class="ed-title f-display">Born on the Track, Built for the Road</h2>
+        <p class="ed-text">From the 356 Speedster to the 911 GT3 RS, Porsche has defined what it means to build a sports car. Precision engineering meets sensory delight in every model we curate for our Thailand clients.</p>
+        <a class="ed-link" onclick="filterCollection('Porsche')">Browse Porsche Models <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <div class="ed-visual">
+        <img src="https://images.unsplash.com/photo-1580274455191-1c62238fa333?w=1200&q=80" alt="Porsche">
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap">
+      <div class="section-header"><div class="t-label" style="margin-bottom:12px;">Porsche</div><h2 class="f-display" style="font-size:clamp(1.75rem,3vw,2.75rem);font-weight:300;">Available Models</h2></div>
+      <div class="product-grid" id="porscheProducts"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══ BENTLEY ═══ -->
+<div class="page" id="page-bentley">
+  <div class="brand-hero">
+    <div class="brand-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1563720223185-11003d516935?w=1920&q=80')"></div>
+    <div class="brand-hero-grad"></div>
+    <div class="brand-hero-content wrap">
+      <div class="t-label text-yellow" style="margin-bottom:16px;">AAS × Bentley</div>
+      <div class="brand-name-huge f-display">Bentley</div>
+      <p class="brand-tagline-lg">Where hand-stitched English leather meets 700 horsepower. Each Bentley is a bespoke commission — a lifetime investment in extraordinary mobility.</p>
+      <div style="margin-top:32px;opacity:0;animation:riseIn 1s var(--ease) 0.7s both;">
+        <button class="btn btn-white" onclick="filterCollection('Bentley')">Explore Bentley Collection</button>
+      </div>
+    </div>
+  </div>
+  <section class="section section-dark">
+    <div class="editorial">
+      <div class="ed-visual">
+        <img src="https://images.unsplash.com/photo-1621135802920-133df287f89c?w=1200&q=80" alt="Bentley interior">
+      </div>
+      <div class="ed-body">
+        <div class="ed-label">Craftsmanship</div>
+        <h2 class="ed-title f-display">100 Years of British Grandeur</h2>
+        <p class="ed-text">Every Bentley takes 130 craftspeople over 100 hours to handcraft at Crewe. At AAS Thailand, we represent this tradition of painstaking excellence to the most discerning clientele in Southeast Asia.</p>
+        <a class="ed-link" onclick="filterCollection('Bentley')">Browse Bentley Models <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap">
+      <div class="section-header"><div class="t-label" style="margin-bottom:12px;">Bentley</div><h2 class="f-display" style="font-size:clamp(1.75rem,3vw,2.75rem);font-weight:300;">Available Models</h2></div>
+      <div class="product-grid" id="bentleyProducts"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══ DUCATI ═══ -->
+<div class="page" id="page-ducati">
+  <div class="brand-hero">
+    <div class="brand-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1920&q=80')"></div>
+    <div class="brand-hero-grad"></div>
+    <div class="brand-hero-content wrap">
+      <div class="t-label text-yellow" style="margin-bottom:16px;">AAS × Ducati</div>
+      <div class="brand-name-huge f-display">Ducati</div>
+      <p class="brand-tagline-lg">Born in Bologna, refined at Mugello. Ducati's racing DNA flows through every machine — an instrument of precision engineered for those who live at the limit.</p>
+      <div style="margin-top:32px;opacity:0;animation:riseIn 1s var(--ease) 0.7s both;">
+        <button class="btn btn-white" onclick="filterCollection('Ducati')">Explore Ducati Collection</button>
+      </div>
+    </div>
+  </div>
+  <section class="section">
+    <div class="wrap">
+      <div class="section-header"><div class="t-label" style="margin-bottom:12px;">Ducati</div><h2 class="f-display" style="font-size:clamp(1.75rem,3vw,2.75rem);font-weight:300;">Available Models</h2></div>
+      <div class="product-grid" id="ducatiProducts"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══ HARLEY ═══ -->
+<div class="page" id="page-harley">
+  <div class="brand-hero">
+    <div class="brand-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=1920&q=80')"></div>
+    <div class="brand-hero-grad"></div>
+    <div class="brand-hero-content wrap">
+      <div class="t-label text-yellow" style="margin-bottom:16px;">AAS × Harley-Davidson</div>
+      <div class="brand-name-huge f-display">Harley-<br>Davidson</div>
+      <p class="brand-tagline-lg">120 years of American freedom. The rumble of a V-Twin isn't just sound — it's a philosophy. At AAS, we share Harley's conviction that the road is not just a place, but a way of life.</p>
+      <div style="margin-top:32px;opacity:0;animation:riseIn 1s var(--ease) 0.7s both;">
+        <button class="btn btn-white" onclick="filterCollection('Harley-Davidson')">Explore H-D Collection</button>
+      </div>
+    </div>
+  </div>
+  <section class="section">
+    <div class="wrap">
+      <div class="section-header"><div class="t-label" style="margin-bottom:12px;">Harley-Davidson</div><h2 class="f-display" style="font-size:clamp(1.75rem,3vw,2.75rem);font-weight:300;">Available Models</h2></div>
+      <div class="product-grid" id="harleyProducts"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══ COLLECTION ═══ -->
+<div class="page" id="page-collection">
+  <div class="breadcrumb-bar"><a class="bc-link" onclick="go('home')">Home</a><span class="bc-sep">/</span><span class="bc-current">Collection</span></div>
+  <section class="section">
+    <div class="wrap">
+      <div class="section-header">
+        <div class="t-label" style="margin-bottom:12px;">Private Acquisition</div>
+        <h2 class="f-display" style="font-size:clamp(2rem,4vw,3.5rem);font-weight:300;margin-bottom:32px;">The Collection</h2>
+        <div class="filter-bar" id="filterBar">
+          <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+          <button class="filter-btn" onclick="setFilter('Porsche',this)">Porsche</button>
+          <button class="filter-btn" onclick="setFilter('Bentley',this)">Bentley</button>
+          <button class="filter-btn" onclick="setFilter('Ducati',this)">Ducati</button>
+          <button class="filter-btn" onclick="setFilter('Harley-Davidson',this)">Harley-Davidson</button>
+        </div>
+      </div>
+      <div class="product-grid" id="allProducts"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══ PRODUCT DETAIL ═══ -->
+<div class="page" id="page-product">
+  <div class="breadcrumb-bar">
+    <a class="bc-link" onclick="go('home')">Home</a>
+    <span class="bc-sep">/</span>
+    <a class="bc-link" onclick="go('collection')">Collection</a>
+    <span class="bc-sep">/</span>
+    <span class="bc-current" id="pdBreadcrumb">Product</span>
+  </div>
+  <div class="pd-layout" id="pdLayout" style="padding-top:0;"></div>
+</div>
+
+<!-- ═══ CHECKOUT ═══ -->
+<div class="page" id="page-checkout">
+  <div class="breadcrumb-bar"><a class="bc-link" onclick="go('collection')">← Back to Collection</a></div>
+  <div class="checkout-wrap">
+    <h1 class="f-display" style="font-size:2.25rem;font-weight:300;margin-bottom:48px;">Complete Your Acquisition</h1>
+    <div class="checkout-steps">
+      <div class="cs-step active" id="cs1"><div class="cs-num active" id="csn1">1</div><span class="cs-label">Details</span></div>
+      <div class="cs-line"></div>
+      <div class="cs-step" id="cs2"><div class="cs-num" id="csn2">2</div><span class="cs-label">Payment</span></div>
+      <div class="cs-line"></div>
+      <div class="cs-step" id="cs3"><div class="cs-num" id="csn3">3</div><span class="cs-label">Confirm</span></div>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="step-panel active" id="sp1">
+      <div class="form-section">
+        <div class="form-section-title">Personal Information</div>
+        <div class="form-row" style="margin-bottom:16px;">
+          <div class="form-group"><label class="form-label">First Name</label><input class="form-input" placeholder="Somchai"></div>
+          <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" placeholder="Charoenwong"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Email</label><input class="form-input" placeholder="somchai@example.com" type="email"></div>
+          <div class="form-group"><label class="form-label">Phone</label><input class="form-input" placeholder="+66 8X XXX XXXX"></div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">Delivery Address</div>
+        <div class="form-group" style="margin-bottom:16px;"><label class="form-label">Address Line 1</label><input class="form-input" placeholder="123 Sukhumvit Road"></div>
+        <div class="form-row" style="margin-bottom:16px;">
+          <div class="form-group"><label class="form-label">District</label><input class="form-input" placeholder="Watthana"></div>
+          <div class="form-group"><label class="form-label">Province</label><input class="form-input" placeholder="Bangkok"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Postal Code</label><input class="form-input" placeholder="10110"></div>
+          <div class="form-group"><label class="form-label">Country</label><input class="form-input" value="Thailand"></div>
+        </div>
+      </div>
+      <div class="co-summary" id="coSummary1"></div>
+      <div class="step-nav"><button class="btn btn-white" onclick="nextStep(2)">Continue to Payment →</button></div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step-panel" id="sp2">
+      <div class="form-section">
+        <div class="form-section-title">Payment Method</div>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;">
+          <label style="display:flex;align-items:center;gap:16px;padding:20px;border:1px solid var(--border);cursor:pointer;transition:border-color .2s;" onmouseover="this.style.borderColor='rgba(255,255,255,.3)'" onmouseout="this.style.borderColor='var(--border)'">
+            <input type="radio" name="pay" checked style="accent-color:var(--white);">
+            <span style="font-size:.875rem;font-weight:500;">Credit / Debit Card</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:16px;padding:20px;border:1px solid var(--border);cursor:pointer;transition:border-color .2s;" onmouseover="this.style.borderColor='rgba(255,255,255,.3)'" onmouseout="this.style.borderColor='var(--border)'">
+            <input type="radio" name="pay" style="accent-color:var(--white);">
+            <span style="font-size:.875rem;font-weight:500;">Bank Transfer</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:16px;padding:20px;border:1px solid var(--border);cursor:pointer;transition:border-color .2s;" onmouseover="this.style.borderColor='rgba(255,255,255,.3)'" onmouseout="this.style.borderColor='var(--border)'">
+            <input type="radio" name="pay" style="accent-color:var(--white);">
+            <span style="font-size:.875rem;font-weight:500;">Concierge Arrangement</span>
+          </label>
+        </div>
+        <div class="form-group" style="margin-bottom:16px;"><label class="form-label">Card Number</label><input class="form-input" placeholder="4111 1111 1111 1111"></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Expiry</label><input class="form-input" placeholder="MM / YY"></div>
+          <div class="form-group"><label class="form-label">CVV</label><input class="form-input" placeholder="•••"></div>
+        </div>
+      </div>
+      <div class="co-summary" id="coSummary2"></div>
+      <div class="step-nav">
+        <button class="btn btn-outline" onclick="nextStep(1)">← Back</button>
+        <button class="btn btn-white" onclick="nextStep(3)">Review Order →</button>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step-panel" id="sp3">
+      <div style="text-align:center;padding:64px 32px;">
+        <div style="font-size:3rem;margin-bottom:24px;">✓</div>
+        <h2 class="f-display" style="font-size:2rem;font-weight:300;margin-bottom:16px;">Acquisition Confirmed</h2>
+        <p style="color:var(--grey-light);font-size:.9375rem;line-height:1.8;max-width:480px;margin:0 auto 40px;">Your acquisition reference is <strong style="color:var(--white);">#AAS-2025-00847</strong>. Our concierge team will contact you within 24 hours to arrange delivery and complete final documentation.</p>
+        <button class="btn btn-white" onclick="confirmOrder()">Return to Collection</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ NEWS ═══ -->
+<div class="page" id="page-news">
+  <div class="breadcrumb-bar"><a class="bc-link" onclick="go('home')">Home</a><span class="bc-sep">/</span><span class="bc-current">News & Events</span></div>
+  <section class="section">
+    <div class="wrap">
+      <div class="section-header"><div class="t-label" style="margin-bottom:12px;">Latest</div><h2 class="f-display" style="font-size:clamp(2rem,4vw,3.5rem);font-weight:300;">News & Events</h2></div>
+      <div class="news-grid" id="allNews"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══ ABOUT ═══ -->
+<div class="page" id="page-about">
+  <div class="about-hero">
+    <div class="about-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=80')"></div>
+    <div class="hero-vignette"></div>
+    <div class="about-hero-content wrap">
+      <div class="t-label text-yellow" style="margin-bottom:16px;">Since 1988</div>
+      <h1 class="f-display" style="font-size:clamp(2.5rem,6vw,5rem);font-weight:300;line-height:1.05;max-width:700px;">Stewards of Automotive Excellence</h1>
+    </div>
+  </div>
+  <section class="section section-dark">
+    <div class="editorial">
+      <div class="ed-visual"><img src="https://images.unsplash.com/photo-1580274455191-1c62238fa333?w=1200&q=80" alt="AAS showroom"></div>
+      <div class="ed-body">
+        <div class="ed-label">Our Story</div>
+        <h2 class="ed-title f-display">Three Decades of Precision</h2>
+        <p class="ed-text">Founded in Bangkok in 1988, AAS began as a single Porsche dealership with a singular conviction: that the ownership of a great machine should be accompanied by an equally great relationship. That conviction has since grown to encompass four of the world's most iconic brands, served across Thailand by a team of over 800 dedicated professionals.</p>
+        <p class="ed-text" style="margin-top:16px;">We don't simply sell vehicles. We initiate a lifelong relationship between owner and machine — from the moment of selection to decades of meticulous care.</p>
+      </div>
+    </div>
+  </section>
+  <section style="padding:0;" class="section-darker">
+    <div class="wrap"><div class="stats-row">
+      <div class="stat"><div class="stat-num f-display">1988</div><div class="stat-lbl">Founded</div></div>
+      <div class="stat"><div class="stat-num f-display">800+</div><div class="stat-lbl">Team Members</div></div>
+      <div class="stat"><div class="stat-num f-display">18</div><div class="stat-lbl">Locations</div></div>
+      <div class="stat"><div class="stat-num f-display">4</div><div class="stat-lbl">Iconic Brands</div></div>
+    </div></div>
+  </section>
+</div>
+
+<!-- ═══ CONTACT ═══ -->
+<div class="page" id="page-contact">
+  <div class="breadcrumb-bar"><a class="bc-link" onclick="go('home')">Home</a><span class="bc-sep">/</span><span class="bc-current">Contact</span></div>
+  <section class="section">
+    <div class="wrap">
+      <div class="section-header"><div class="t-label" style="margin-bottom:12px;">Get in Touch</div><h2 class="f-display" style="font-size:clamp(2rem,4vw,3.5rem);font-weight:300;">Contact AAS</h2></div>
+      <div class="contact-grid">
+        <div>
+          <div class="contact-info-item"><span class="contact-icon">📍</span><div><div class="contact-detail-label">Head Office</div><div class="contact-detail-val">1 AAS Automotive Tower<br>Rama IV Road, Bangkok 10500</div></div></div>
+          <div class="contact-info-item"><span class="contact-icon">📞</span><div><div class="contact-detail-label">Telephone</div><div class="contact-detail-val">+66 2 XXX XXXX</div></div></div>
+          <div class="contact-info-item"><span class="contact-icon">✉️</span><div><div class="contact-detail-label">Email</div><div class="contact-detail-val">concierge@aasautoservice.com</div></div></div>
+          <div class="contact-info-item"><span class="contact-icon">⏰</span><div><div class="contact-detail-label">Hours</div><div class="contact-detail-val">Monday – Saturday<br>9:00 AM – 6:00 PM</div></div></div>
+        </div>
+        <div>
+          <div class="form-section-title" style="font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;color:var(--grey-light);margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border);">Send a Message</div>
+          <div class="form-group" style="margin-bottom:16px;"><label class="form-label">Full Name</label><input class="form-input" placeholder="Your name"></div>
+          <div class="form-group" style="margin-bottom:16px;"><label class="form-label">Email</label><input class="form-input" placeholder="your@email.com" type="email"></div>
+          <div class="form-group" style="margin-bottom:16px;"><label class="form-label">Brand of Interest</label>
+            <select class="form-input" style="cursor:pointer;">
+              <option>Porsche</option><option>Bentley</option><option>Ducati</option><option>Harley-Davidson</option><option>General Enquiry</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:24px;"><label class="form-label">Message</label><textarea class="form-input" rows="5" placeholder="How can our concierge team assist you?" style="resize:vertical;"></textarea></div>
+          <button class="btn btn-white" onclick="showToast('Message sent. Our concierge will respond within 24 hours.')">Send Message</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══ CAREERS ═══ -->
+<div class="page" id="page-careers">
+  <div class="breadcrumb-bar"><a class="bc-link" onclick="go('home')">Home</a><span class="bc-sep">/</span><span class="bc-current">Careers</span></div>
+  <section class="section">
+    <div class="wrap">
+      <div class="section-header"><div class="t-label" style="margin-bottom:12px;">Join the Team</div><h2 class="f-display" style="font-size:clamp(2rem,4vw,3.5rem);font-weight:300;">Careers at AAS</h2></div>
+      <div id="jobsList"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══ LOCATIONS ═══ -->
+<div class="page" id="page-locations">
+  <div class="breadcrumb-bar"><a class="bc-link" onclick="go('home')">Home</a><span class="bc-sep">/</span><span class="bc-current">Locations</span></div>
+  <section class="section">
+    <div class="wrap">
+      <div class="section-header"><div class="t-label" style="margin-bottom:12px;">Find Us</div><h2 class="f-display" style="font-size:clamp(2rem,4vw,3.5rem);font-weight:300;">Our Locations</h2></div>
+      <div class="locations-grid" id="locationsList"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══ PROFILE ═══ -->
+<div class="page" id="page-profile">
+  <div class="breadcrumb-bar"><a class="bc-link" onclick="go('home')">Home</a><span class="bc-sep">/</span><span class="bc-current">My Account</span></div>
+  <section class="section">
+    <div class="wrap">
+      <div style="margin-bottom:48px;"><div class="t-label" style="margin-bottom:8px;">Welcome back</div><h2 class="f-display" style="font-size:2rem;font-weight:300;">Somchai Charoenwong</h2></div>
+      <div class="profile-tabs">
+        <button class="profile-tab active" onclick="showTab('orders',this)">Orders</button>
+        <button class="profile-tab" onclick="showTab('tracking',this)">Tracking</button>
+        <button class="profile-tab" onclick="showTab('account',this)">Account</button>
+      </div>
+      <div class="tab-panel active" id="tab-orders">
+        <div style="margin-bottom:20px;font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;color:var(--grey-light);">Order History</div>
+        <div class="order-row" style="font-size:.625rem;letter-spacing:.15em;text-transform:uppercase;color:var(--grey-light);padding-bottom:12px;">
+          <span>Order</span><span>Item</span><span>Total</span><span>Status</span>
+        </div>
+        <div class="order-row"><span class="order-num">#AAS-2025-00841</span><span>Porsche 911 GT3 RS Jacket</span><span>฿12,500</span><span><div class="order-status st-delivered">Delivered</div></span></div>
+        <div class="order-row"><span class="order-num">#AAS-2025-00798</span><span>Ducati Panigale V4 Helmet</span><span>฿28,000</span><span><div class="order-status st-shipped">Shipped</div></span></div>
+        <div class="order-row"><span class="order-num">#AAS-2025-00752</span><span>Bentley Leather Wallet Set</span><span>฿18,500</span><span><div class="order-status st-delivered">Delivered</div></span></div>
+        <div class="order-row"><span class="order-num">#AAS-2025-00700</span><span>Harley-Davidson Riding Boots</span><span>฿22,000</span><span><div class="order-status st-processing">Processing</div></span></div>
+      </div>
+      <div class="tab-panel" id="tab-tracking">
+        <div style="padding:48px;text-align:center;border:1px solid var(--border);">
+          <p style="color:var(--grey-light);margin-bottom:24px;font-size:.9375rem;">Enter your order number to track your acquisition</p>
+          <div style="display:flex;gap:12px;max-width:400px;margin:0 auto;">
+            <input class="form-input" placeholder="#AAS-2025-XXXXX" style="flex:1;">
+            <button class="btn btn-white btn-sm" onclick="showToast('Order located — see tracking details below.')">Track</button>
+          </div>
+        </div>
+      </div>
+      <div class="tab-panel" id="tab-account">
+        <div class="form-section">
+          <div class="form-section-title">Personal Details</div>
+          <div class="form-row" style="margin-bottom:16px;">
+            <div class="form-group"><label class="form-label">First Name</label><input class="form-input" value="Somchai"></div>
+            <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" value="Charoenwong"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Email</label><input class="form-input" value="somchai@example.com" type="email"></div>
+            <div class="form-group"><label class="form-label">Phone</label><input class="form-input" value="+66 81 234 5678"></div>
+          </div>
+          <div style="margin-top:24px;"><button class="btn btn-white btn-sm" onclick="showToast('Account details updated.')">Save Changes</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════
+const products = [
+  { id:'p1', brand:'Porsche', name:'911 GT3 RS Racing Jacket', price:12500, badge:'New',
+    img:'https://images.unsplash.com/photo-1591637333184-19aa84b3e01f?w=800&q=80',
+    desc:'Crafted from performance-grade materials used in Porsche Motorsport, this jacket blends trackside precision with everyday wearability. Features Porsche crest embroidery, ventilation panels, and water-resistant finish.',
+    specs:[{l:'Material',v:'Performance Softshell'},{l:'Fit',v:'Athletic Cut'},{l:'Collection',v:'Porsche Motorsport 2025'},{l:'Origin',v:'Germany'}]},
+  { id:'p2', brand:'Porsche', name:'Porsche Design Sunglasses P8000', price:18900, badge:'',
+    img:'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=800&q=80',
+    desc:'Titanium-frame sport sunglasses developed in collaboration with Porsche Design. Wraparound polarized lenses, adjustable nose bridge, and a design language drawn directly from the 911.',
+    specs:[{l:'Frame',v:'Titanium'},{l:'Lens',v:'Polarized'},{l:'UV Protection',v:'UV400'},{l:'Origin',v:'Austria'}]},
+  { id:'p3', brand:'Bentley', name:'Bentley Leather Weekend Bag', price:45000, badge:'Exclusive',
+    img:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&q=80',
+    desc:'Hand-stitched by Bentley\'s craftspeople in Crewe using the same Nappa leather as the Bentayga interior. A travel companion as refined as the vehicle that inspired it.',
+    specs:[{l:'Material',v:'Nappa Leather'},{l:'Lining',v:'Alcantara'},{l:'Hardware',v:'Polished Chrome'},{l:'Origin',v:'United Kingdom'}]},
+  { id:'p4', brand:'Bentley', name:'Bentley Crystal Whisky Set', price:38500, badge:'',
+    img:'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800&q=80',
+    desc:'A collaboration between Bentley and Waterford Crystal. Six hand-blown crystal glasses and a decanter, each etched with the iconic Bentley matrix pattern and presented in an ebony-finished case.',
+    specs:[{l:'Pieces',v:'7 (6 glasses + decanter)'},{l:'Material',v:'Lead Crystal'},{l:'Case',v:'Ebony Finish'},{l:'Origin',v:'Ireland'}]},
+  { id:'p5', brand:'Ducati', name:'Panigale V4 Full Race Helmet', price:28000, badge:'Limited',
+    img:'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&q=80',
+    desc:'Designed in collaboration with AGV for Ducati MotoGP teams. Carbon fiber shell, MIPS technology, and the authentic Ducati Corse livery worn by championship-winning riders.',
+    specs:[{l:'Shell',v:'Carbon Fibre'},{l:'Safety',v:'MIPS + ECE 22.06'},{l:'Ventilation',v:'Race-grade flow'},{l:'Origin',v:'Italy'}]},
+  { id:'p6', brand:'Ducati', name:'Scrambler Riding Gloves', price:8500, badge:'',
+    img:'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=800&q=80',
+    desc:'Short-cuff leather riding gloves from the Scrambler collection. Perforated for ventilation, D3O knuckle protection, and touchscreen-compatible fingertips. Café racer heritage, modern protection.',
+    specs:[{l:'Material',v:'Full-Grain Leather'},{l:'Protection',v:'D3O Knuckles'},{l:'Lining',v:'Mesh'},{l:'Origin',v:'Italy'}]},
+  { id:'p7', brand:'Harley-Davidson', name:'Screamin Eagle Riding Boots', price:22000, badge:'',
+    img:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80',
+    desc:'Full-grain leather engineer boots from the Screamin\' Eagle performance line. Reinforced ankle protection, oil-resistant Vibram sole, and a profile that\'s equally at home on the Iron 883 or in a boardroom.',
+    specs:[{l:'Upper',v:'Full-Grain Leather'},{l:'Sole',v:'Vibram Oil-Resistant'},{l:'Ankle',v:'Reinforced'},{l:'Origin',v:'USA'}]},
+  { id:'p8', brand:'Harley-Davidson', name:'Bar & Shield Chronograph Watch', price:35000, badge:'New',
+    img:'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80',
+    desc:'Swiss-made chronograph in partnership with Timex Heritage. Sapphire crystal, 316L stainless steel case, and an automatic movement. The Bar & Shield emblem is hand-engraved on the caseback.',
+    specs:[{l:'Movement',v:'Automatic'},{l:'Crystal',v:'Sapphire'},{l:'Case',v:'316L Stainless Steel'},{l:'Origin',v:'Switzerland'}]},
+];
+
+const newsItems = [
+  { title:'Porsche Unleashes the 2025 GT3 RS Weissach Package in Thailand', date:'May 2025', brand:'Porsche', img:'https://images.unsplash.com/photo-1503376763036-066120622c74?w=800&q=80', excerpt:'AAS Thailand unveils the most extreme street-legal Porsche ever offered in Southeast Asia. Limited to eight units.' },
+  { title:'Bentley Bangkok Invites You to the Bespoke Atelier Experience', date:'Apr 2025', brand:'Bentley', img:'https://images.unsplash.com/photo-1563720223185-11003d516935?w=800&q=80', excerpt:'Discover the full breadth of Bentley\'s bespoke programme at our new Atelier Suite, opening at Sukhumvit this June.' },
+  { title:'Ducati Panigale V4 SP2 Track Day — Buriram Circuit', date:'Mar 2025', brand:'Ducati', img:'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&q=80', excerpt:'Registered Ducati clients are invited to experience the Panigale V4 SP2 at pace on the Chang International Circuit.' },
+  { title:'Harley-Davidson LiveWire One Thailand Launch', date:'Feb 2025', brand:'Harley-Davidson', img:'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=800&q=80', excerpt:'AAS announces the official arrival of the LiveWire One electric motorcycle to the Thai market, starting at ฿589,000.' },
+  { title:'AAS Group Records Best-Ever Q1 Delivery Volume', date:'Jan 2025', brand:'AAS', img:'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&q=80', excerpt:'Across all four brands, AAS Thailand delivered 847 vehicles in Q1 2025 — a record for the group since its founding in 1988.' },
+  { title:'The AAS Collectors\' Evening — An Annual Tradition', date:'Dec 2024', brand:'AAS', img:'https://images.unsplash.com/photo-1580274455191-1c62238fa333?w=800&q=80', excerpt:'Over 300 AAS clients and guests gathered at the Four Seasons Bangkok for an evening celebrating automotive artistry.' },
+];
+
+const jobs = [
+  { title:'Brand Experience Manager — Porsche', loc:'Bangkok', type:'Full-time' },
+  { title:'Concierge Sales Advisor — Bentley', loc:'Bangkok', type:'Full-time' },
+  { title:'Service Technician — Ducati', loc:'Chiang Mai', type:'Full-time' },
+  { title:'Digital & Content Specialist', loc:'Bangkok (Hybrid)', type:'Full-time' },
+  { title:'Client Relations Associate — Harley-Davidson', loc:'Phuket', type:'Full-time' },
+  { title:'Finance & Operations Analyst', loc:'Bangkok', type:'Full-time' },
+];
+
+const locations = [
+  { brand:'Porsche', name:'Porsche Centre Bangkok', addr:'Rama IV Road, Klong Toei', hours:'Mon–Sat 9AM–6PM' },
+  { brand:'Bentley', name:'Bentley Bangkok', addr:'Sukhumvit 55, Thong Lo', hours:'Mon–Sat 10AM–7PM' },
+  { brand:'Ducati', name:'Ducati Bangkok', addr:'Lat Phrao Road, Chatuchak', hours:'Mon–Sat 9AM–6PM' },
+  { brand:'Harley-Davidson', name:'H-D Bangkok', addr:'Vibhavadi-Rangsit Road', hours:'Mon–Sat 9AM–6PM' },
+  { brand:'Porsche', name:'Porsche Centre Chiang Mai', addr:'Huai Kaew Road, Muang', hours:'Mon–Sat 9AM–6PM' },
+  { brand:'Ducati', name:'Ducati Phuket', addr:'Thepkrasattri Road, Phuket', hours:'Mon–Sat 9AM–6PM' },
+];
+
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+let cart = [];
+let currentFilter = 'all';
+let currentPage = 'home';
+
+// ═══════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════
+function go(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById('page-' + page);
+  if (target) {
+    target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    currentPage = page;
+    updateNavActive(page);
+    renderPageContent(page);
+    triggerHeroZoom(page);
+  }
+}
+
+function updateNavActive(page) {
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.classList.remove('active');
+    if (a.getAttribute('data-page') === page) a.classList.add('active');
+  });
+}
+
+function renderPageContent(page) {
+  if (page === 'home') { renderHomeProducts(); renderHomeNews(); }
+  if (page === 'collection') renderCollection();
+  if (page === 'porsche') renderBrandProducts('Porsche', 'porscheProducts');
+  if (page === 'bentley') renderBrandProducts('Bentley', 'bentleyProducts');
+  if (page === 'ducati') renderBrandProducts('Ducati', 'ducatiProducts');
+  if (page === 'harley') renderBrandProducts('Harley-Davidson', 'harleyProducts');
+  if (page === 'news') renderNews();
+  if (page === 'careers') renderJobs();
+  if (page === 'locations') renderLocations();
+  if (page === 'checkout') renderCheckoutSummary();
+}
+
+function triggerHeroZoom(page) {
+  const bgs = document.querySelectorAll('.brand-hero-bg, #heroBg');
+  bgs.forEach(bg => { bg.classList.remove('zoom'); setTimeout(()=>bg.classList.add('zoom'),50); });
+}
+
+function toggleMob() {
+  document.getElementById('mobNav').classList.toggle('open');
+}
+
+// ═══════════════════════════════════════════
+// CART
+// ═══════════════════════════════════════════
+function toggleCart() {
+  document.getElementById('cartDrawer').classList.toggle('open');
+  document.getElementById('cartBackdrop').classList.toggle('open');
+}
+
+function addToCart(id) {
+  const p = products.find(x => x.id === id);
+  if (!p) return;
+  const ex = cart.find(x => x.id === id);
+  if (ex) { ex.qty++; }
+  else { cart.push({ ...p, qty: 1 }); }
+  updateCartUI();
+  showToast(`"${p.name}" added to your collection`);
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(x => x.id !== id);
+  updateCartUI();
+}
+
+function changeQty(id, delta) {
+  const item = cart.find(x => x.id === id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) removeFromCart(id);
+  else updateCartUI();
+}
+
+function updateCartUI() {
+  const total = cart.reduce((s, x) => s + x.price * x.qty, 0);
+  const count = cart.reduce((s, x) => s + x.qty, 0);
+
+  // dot
+  const dot = document.getElementById('cartDot');
+  if (dot) dot.classList.toggle('visible', count > 0);
+
+  // count
+  const cc = document.getElementById('cartCount');
+  if (cc) cc.textContent = count + (count === 1 ? ' item' : ' items');
+
+  // total
+  const ct = document.getElementById('cartTotal');
+  if (ct) ct.textContent = '฿' + total.toLocaleString();
+
+  // empty state
+  const empty = document.getElementById('cartEmpty');
+  const list = document.getElementById('cartItemsList');
+  const foot = document.getElementById('cartFoot');
+  if (empty) empty.style.display = cart.length ? 'none' : 'flex';
+  if (foot) foot.style.display = cart.length ? 'block' : 'none';
+
+  if (list) {
+    list.innerHTML = cart.map(item => `
+      <div class="cart-item">
+        <img class="cart-item-img" src="${item.img}" alt="${item.name}">
+        <div>
+          <div class="ci-brand">${item.brand}</div>
+          <div class="ci-name">${item.name}</div>
+          <div class="ci-price">฿${item.price.toLocaleString()}</div>
+          <div class="ci-qty">
+            <button class="qty-btn" onclick="changeQty('${item.id}',-1)">−</button>
+            <span style="font-size:.875rem;min-width:20px;text-align:center;">${item.qty}</span>
+            <button class="qty-btn" onclick="changeQty('${item.id}',1)">+</button>
+          </div>
+        </div>
+        <button class="ci-remove" onclick="removeFromCart('${item.id}')">✕</button>
+      </div>
+    `).join('');
+  }
+}
+
+// ═══════════════════════════════════════════
+// PRODUCT CARDS
+// ═══════════════════════════════════════════
+function productCard(p) {
+  return `
+    <div class="product-card" onclick="showProduct('${p.id}')">
+      <div class="pc-img">
+        <img src="${p.img}" alt="${p.name}" loading="lazy">
+        ${p.badge ? `<div class="pc-badge">${p.badge}</div>` : ''}
+      </div>
+      <div class="pc-body">
+        <div class="pc-brand">${p.brand}</div>
+        <div class="pc-name">${p.name}</div>
+        <div class="pc-price"><strong>฿${p.price.toLocaleString()}</strong></div>
+      </div>
+      <div class="pc-action">
+        <button class="btn btn-white btn-sm btn-full" onclick="event.stopPropagation();addToCart('${p.id}')">+ Add to Collection</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderHomeProducts() {
+  const el = document.getElementById('homeFeatured');
+  if (el) el.innerHTML = products.slice(0,3).map(productCard).join('');
+}
+
+function renderBrandProducts(brand, elId) {
+  const el = document.getElementById(elId);
+  if (el) el.innerHTML = products.filter(p => p.brand === brand).map(productCard).join('');
+}
+
+function renderCollection() {
+  const el = document.getElementById('allProducts');
+  if (!el) return;
+  const filtered = currentFilter === 'all' ? products : products.filter(p => p.brand === currentFilter);
+  el.innerHTML = filtered.map(productCard).join('');
+}
+
+function setFilter(brand, btn) {
+  currentFilter = brand;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCollection();
+}
+
+function filterCollection(brand) {
+  currentFilter = brand;
+  go('collection');
+}
+
+// ═══════════════════════════════════════════
+// PRODUCT DETAIL
+// ═══════════════════════════════════════════
+function showProduct(id) {
+  const p = products.find(x => x.id === id);
+  if (!p) return;
+  const bc = document.getElementById('pdBreadcrumb');
+  if (bc) bc.textContent = p.name;
+  const layout = document.getElementById('pdLayout');
+  if (layout) {
+    layout.innerHTML = `
+      <div class="pd-gallery">
+        <img src="${p.img}" alt="${p.name}">
+      </div>
+      <div class="pd-info">
+        <div class="pd-brand">${p.brand}</div>
+        <h1 class="pd-name f-display">${p.name}</h1>
+        <div class="pd-price">฿${p.price.toLocaleString()}</div>
+        <p class="pd-desc">${p.desc}</p>
+        <div class="pd-specs">
+          ${p.specs.map(s=>`<div class="spec-item"><div class="spec-label">${s.l}</div><div class="spec-val">${s.v}</div></div>`).join('')}
+        </div>
+        <div class="pd-actions">
+          <button class="btn btn-white" onclick="addToCart('${p.id}');toggleCart();">+ Add to Collection</button>
+          <button class="btn btn-outline" onclick="go('collection')">← Back to Collection</button>
+        </div>
+      </div>
+    `;
+  }
+  go('product');
+}
+
+// ═══════════════════════════════════════════
+// NEWS
+// ═══════════════════════════════════════════
+function newsCard(n) {
+  return `
+    <div class="news-card" onclick="showToast('Full article coming soon.')">
+      <div class="nc-img"><img src="${n.img}" alt="${n.title}" loading="lazy"></div>
+      <div class="nc-body">
+        <div class="nc-meta">${n.brand} · ${n.date}</div>
+        <div class="nc-title">${n.title}</div>
+        <div class="nc-excerpt">${n.excerpt}</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderHomeNews() {
+  const el = document.getElementById('homeNews');
+  if (el) el.innerHTML = newsItems.slice(0,3).map(newsCard).join('');
+}
+
+function renderNews() {
+  const el = document.getElementById('allNews');
+  if (el) el.innerHTML = newsItems.map(newsCard).join('');
+}
+
+// ═══════════════════════════════════════════
+// JOBS & LOCATIONS
+// ═══════════════════════════════════════════
+function renderJobs() {
+  const el = document.getElementById('jobsList');
+  if (!el) return;
+  el.innerHTML = jobs.map(j => `
+    <div class="job-item">
+      <div>
+        <div class="job-title">${j.title}</div>
+        <div class="job-meta">${j.loc} · ${j.type}</div>
+      </div>
+      <button class="btn btn-outline btn-sm" onclick="showToast('Application form coming soon.')">Apply →</button>
+    </div>
+  `).join('');
+}
+
+function renderLocations() {
+  const el = document.getElementById('locationsList');
+  if (!el) return;
+  el.innerHTML = locations.map(l => `
+    <div class="loc-card" onclick="showToast('Opening directions for ${l.name}')">
+      <div class="loc-brand-tag">${l.brand}</div>
+      <div class="loc-name">${l.name}</div>
+      <div class="loc-addr">${l.addr}</div>
+      <div class="loc-hours">${l.hours}</div>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════
+// CHECKOUT
+// ═══════════════════════════════════════════
+let currentStep = 1;
+
+function renderCheckoutSummary() {
+  const total = cart.reduce((s, x) => s + x.price * x.qty, 0);
+  const rows = cart.length
+    ? cart.map(x=>`<div class="co-sum-row"><span>${x.name} ×${x.qty}</span><span>฿${(x.price*x.qty).toLocaleString()}</span></div>`).join('')
+    : '<div class="co-sum-row" style="color:var(--grey-light)"><span>No items</span></div>';
+  const html = `
+    <div class="co-sum-title">Order Summary</div>
+    ${rows}
+    <div class="co-sum-row total"><span>Total</span><span>฿${total.toLocaleString()}</span></div>
+  `;
+  ['coSummary1','coSummary2'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = html;
+  });
+}
+
+function nextStep(n) {
+  if (n === 3 && cart.length === 0) { showToast('Your collection is empty'); return; }
+  document.querySelectorAll('.step-panel').forEach((p,i) => p.classList.toggle('active', i+1===n));
+  [1,2,3].forEach(i => {
+    const num = document.getElementById('csn'+i);
+    const step = document.getElementById('cs'+i);
+    if (!num||!step) return;
+    num.className = 'cs-num' + (i < n ? ' done' : i === n ? ' active' : '');
+    step.className = 'cs-step' + (i === n ? ' active' : '');
+  });
+  currentStep = n;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function confirmOrder() {
+  cart = [];
+  updateCartUI();
+  currentStep = 1;
+  go('collection');
+}
+
+// ═══════════════════════════════════════════
+// PROFILE TABS
+// ═══════════════════════════════════════════
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.profile-tab').forEach(b => b.classList.remove('active'));
+  const panel = document.getElementById('tab-'+name);
+  if (panel) panel.classList.add('active');
+  btn.classList.add('active');
+}
+
+// ═══════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+// ═══════════════════════════════════════════
+// NAV SCROLL
+// ═══════════════════════════════════════════
+window.addEventListener('scroll', () => {
+  document.getElementById('mainNav').classList.toggle('solid', window.scrollY > 60);
+});
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  renderHomeProducts();
+  renderHomeNews();
+  // hero zoom on load
+  setTimeout(() => {
+    const bg = document.getElementById('heroBg');
+    if (bg) bg.classList.add('zoom');
+  }, 100);
+});
+</script>
+</body>
+</html>
